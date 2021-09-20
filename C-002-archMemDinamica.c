@@ -8,6 +8,7 @@
 //Función para encontrar la cadena
 int strcmp2(char*, char*);
 int isIdentifier(char*);
+int aux=0;
 int main(){
 ///Variables
 	FILE *archivo = NULL,*reserva = NULL;//File, uno para el programa y otro para palabras reservadas
@@ -83,11 +84,11 @@ int main(){
 	return 0;
 }
 int strcmp2(char* cadena, char* palabra){//Devuelve -1 si la cadena no se encuentra
-    int i, j = 0;
-    for(i=0;i<strlen(cadena);i++){
+    int i, j = 0,tam=strlen(cadena)-1;
+    for(i=0;i<tam;i++){
         if(palabra[j] == cadena[i]){
             ++j;
-            if(j == strlen(palabra))
+            if(j == tam)
                 return (2 + i - j);
         }
         else j = 0;
@@ -114,12 +115,13 @@ int isDec(char* cadena){//Evalúa si es una declaración, devuelve -1 si no lo es
 int isIdentifier(char* cad){//Evalúa si es o no un identificador
 	char cadena[200];
 	strcpy(cadena,cad);
-    int i,flag=false;
-    printf("->s");
-    for(i=0;i<strlen(cadena);i++)
-		printf("%c-",cadena[i]);
-    if(1==2){
-    	
+	aux++;
+    int i,flag=false,tam=strlen(cadena)-1;
+	printf("%i)lenght: %i\n",aux,tam);
+    if(tam<=3){//Omitimos
+    	for(i=0;i<tam;i++)
+    		printf("°%c",cadena[i]);
+    	printf("\n");
 	}else{
 		if(isDec(cadena)!=-1){//Si tiene el tipo de dato como char, int, etc.
 	    	i=isDec(cadena)+1;//Empezaría en el espacio despues de la palabra ejemplo char 
@@ -128,7 +130,7 @@ int isIdentifier(char* cad){//Evalúa si es o no un identificador
 	    	if( (tolower(cadena[i])>='a' && tolower(cadena[i])<='z') || cadena[i]=='_' ){
 	    		//printf("\nEmpieza bien");
 	    		flag = true;
-		    	for(;i<strlen(cadena)-1;i++){
+		    	for(;i<tam-1;i++){
 		    		if( (tolower(cadena[i])>='a' && tolower(cadena[i])<='z') || cadena[i]=='_' || (tolower(cadena[i])>='0' && tolower(cadena[i])<='9')){
 		    			//printf("\nIdentificador valido");
 					}else{
@@ -142,8 +144,6 @@ int isIdentifier(char* cad){//Evalúa si es o no un identificador
 	}
     return flag;
 }
-
-
 
 
 
