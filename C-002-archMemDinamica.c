@@ -120,9 +120,6 @@ int isIdentifier(char* cad){//Evalúa si es o no un identificador
 	cadena[tam]='\0';
 	//printf("%s\n",cadena);
     if(tam<=3){//Omitimos
-    	/*for(i=0;i<tam;i++)
-    		printf("°%c",cadena[i]);
-    	printf("\n");*/
 		flag=false;
 	}else{
 		if(isDec(cadena)!=-1){//Si tiene el tipo de dato como char, int, etc.
@@ -150,6 +147,16 @@ int isIdentifier(char* cad){//Evalúa si es o no un identificador
 					}
 					if( fEsp==0 && (cadena[i]=='[') ){//Cuando se abre el corchete, validamos
 						fCamb=1;
+						if(cadena[i+1]<'0' || cadena[i+1]>'9')
+							fCamb=0;
+						else{
+							while(cadena[i+1]>='0' && cadena[i+1]<='9')
+								i++;
+							if(cadena[i+1]!=']')
+								fCamb=0;
+							else
+								i++;
+						}
 					}
 					if( (cadena[i]=='=') ){//Cuando asigna un valor
 						fCamb=1;

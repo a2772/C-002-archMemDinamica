@@ -8,6 +8,7 @@ int main(void)
 	int i;
 	int **po1nter;
 	char palabra[100];
+	char *array[10],car;
 	printf("Introduce la cadena: \n");
 	gets(palabra);
 
