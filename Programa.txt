@@ -6,6 +6,7 @@ void sufijos(char *palabra, int longi);
 int main(void)
 {
 	int i;
+	int **po1nter;
 	char palabra[100];
 	printf("Introduce la cadena: \n");
 	gets(palabra);
@@ -18,7 +19,7 @@ int main(void)
 
 void prefijos(char *palabra,int longi)
 {
-	int i,x;
+	int i, x;
 	i = x = 0;
 	while(i<longi){
 		for (x=0; x <= i; x++)

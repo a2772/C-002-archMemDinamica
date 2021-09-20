@@ -112,7 +112,7 @@ int isDec(char* cadena){//Evalúa si es una declaración, devuelve -1 si no lo es
 }
 int isIdentifier(char* cad){//Evalúa si es o no un identificador
 	char cadena[N];
-    int i,flag=false,tam=strlen(cad)-1,ff=0;//ff es el flip flop
+    int i,flag=false,tam=strlen(cad)-1,ff=0,fEsp=0,fCamb=1;//f es la flag
     //Copiamos la cadena
     for(i=0;i<tam;i++){
     	cadena[i]=cad[i];
@@ -129,16 +129,43 @@ int isIdentifier(char* cad){//Evalúa si es o no un identificador
 	    	i=isDec(cadena)+1;//Empezaría en el espacio despues de la palabra ejemplo char 
 	    	i+=tabCounter(cadena);
 	    	////////////////////////////////////////////////////////////////////////////?
+	    	while(cadena[i]=='*')//Puede ser un apuntador
+	    		i++;
 	    	if( (tolower(cadena[i])>='a' && tolower(cadena[i])<='z') || cadena[i]=='_' ){
 	    		//printf("\nEmpieza bien");
 	    		flag = true;
 	    		ff=1;//Puede declararse otra variable
 		    	for(;i<tam-1;i++){
-		    		if( (tolower(cadena[i])>='a' && tolower(cadena[i])<='z') || cadena[i]=='_' || (tolower(cadena[i])>='0' && tolower(cadena[i])<='9')){
+		    		fCamb=0;//Bandera de cambios
+		    		if( fEsp==0 && ((tolower(cadena[i])>='a' && tolower(cadena[i])<='z') || cadena[i]=='_' || (tolower(cadena[i])>='0' && tolower(cadena[i])<='9')) ){
+						fCamb=1;
 						ff=1;//Puede declararse otra variable
-					}else if(cadena[i]==','&&ff==1){
+						//Evaluamos en caso de que de espacio e igual
+						while(cadena[i+1]==' '){//En caso de que ponga espacios
+							//En este caso, buscamos hasta que se acaben, encendemos
+							//La bandera espacio no permite continuar con identificador
+							i++;
+							fEsp=1;
+						}
+					}
+					if( fEsp==0 && (cadena[i]=='[') ){//Cuando se abre el corchete, validamos
+						fCamb=1;
+					}
+					if( (cadena[i]=='=') ){//Cuando asigna un valor
+						fCamb=1;
+						while(cadena[i]!=',' && i<tam-1){
+							i++;
+						}
+					}
+					if(cadena[i]==',' && ff==1){
 						ff=0;//Debe declararse ua nueva variable antes de continuar, asi evitamos que pongan dobles comas
-					}else{
+						fCamb=1;
+						while(cadena[i+1]==' '){
+							i++;
+						}
+						fEsp=0;
+					}
+					if(fCamb==0){
 						flag=false;
 						break;
 					}
