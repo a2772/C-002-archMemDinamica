@@ -5,7 +5,7 @@ void sufijos(char *palabra, int longi);
 
 int main(void)
 {
-int i;
+	int i;
 	char palabra[100];
 	printf("Introduce la cadena: \n");
 	gets(palabra);

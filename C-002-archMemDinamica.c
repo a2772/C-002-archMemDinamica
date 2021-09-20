@@ -9,8 +9,8 @@
 int strcmp2(char*, char*);
 int isIdentifier(char*);
 char* substring(char [], int, int);
-char* strcpyMV(char*);
-int aux=0;
+int tabCounter(char*);
+
 int main(){
 ///Variables
 	FILE *archivo = NULL,*reserva = NULL;//File, uno para el programa y otro para palabras reservadas
@@ -112,8 +112,7 @@ int isDec(char* cadena){//Evalúa si es una declaración, devuelve -1 si no lo es
 }
 int isIdentifier(char* cad){//Evalúa si es o no un identificador
 	char cadena[N];
-	aux++;
-    int i,flag=false,tam=strlen(cad)-1;
+    int i,flag=false,tam=strlen(cad)-1,ff=0;//ff es el flip flop
     //Copiamos la cadena
     for(i=0;i<tam;i++){
     	cadena[i]=cad[i];
@@ -128,13 +127,17 @@ int isIdentifier(char* cad){//Evalúa si es o no un identificador
 	}else{
 		if(isDec(cadena)!=-1){//Si tiene el tipo de dato como char, int, etc.
 	    	i=isDec(cadena)+1;//Empezaría en el espacio despues de la palabra ejemplo char 
+	    	i+=tabCounter(cadena);
 	    	////////////////////////////////////////////////////////////////////////////?
 	    	if( (tolower(cadena[i])>='a' && tolower(cadena[i])<='z') || cadena[i]=='_' ){
 	    		//printf("\nEmpieza bien");
 	    		flag = true;
+	    		ff=1;//Puede declararse otra variable
 		    	for(;i<tam-1;i++){
 		    		if( (tolower(cadena[i])>='a' && tolower(cadena[i])<='z') || cadena[i]=='_' || (tolower(cadena[i])>='0' && tolower(cadena[i])<='9')){
-						
+						ff=1;//Puede declararse otra variable
+					}else if(cadena[i]==','&&ff==1){
+						ff=0;//Debe declararse ua nueva variable antes de continuar, asi evitamos que pongan dobles comas
 					}else{
 						flag=false;
 						break;
@@ -158,7 +161,16 @@ char* substring(char s[],int p, int l) {
    	sub[c] = '\0';
    	return sub;
 }
-
+int tabCounter(char* cadena){//nos sirve para contar los tabuladores seguidos
+	int i,c=0;
+	for(i=0;i<strlen(cadena)-1;i++){
+		if(cadena[i]==(char)9){
+			c++;
+		}else
+			break;
+	}
+	return c;
+}
 
 
 
