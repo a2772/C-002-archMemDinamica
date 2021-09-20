@@ -8,6 +8,8 @@
 //Función para encontrar la cadena
 int strcmp2(char*, char*);
 int isIdentifier(char*);
+char* substring(char [], int, int);
+char* strcpyMV(char*);
 int aux=0;
 int main(){
 ///Variables
@@ -70,25 +72,21 @@ int main(){
 ///Match con identificadores
 	///Imprimimos las líneas con identificadores
 	printf("\n\t***Lineas con identificadores***\n-----------------------------------------------\n");
-	for(i=0;i<rows;i++) {
+	for(i=0;i<rows;i++) 
 		if(isIdentifier(cntFile[i])==true) {
-			//printf("%s",cntFile[i]);
-			printf("TRUE");
-		}else{
-			printf("FALSE");
+			printf("%s",cntFile[i]);
 		}
-	}
 	///Liberamos memoria dinámica
 	free(content);
 	free(cntFile);
 	return 0;
 }
 int strcmp2(char* cadena, char* palabra){//Devuelve -1 si la cadena no se encuentra
-    int i, j = 0,tam=strlen(cadena)-1;
-    for(i=0;i<tam;i++){
+    int i, j = 0;
+    for(i=0;i<strlen(cadena);i++){
         if(palabra[j] == cadena[i]){
             ++j;
-            if(j == tam)
+            if(j == strlen(palabra))
                 return (2 + i - j);
         }
         else j = 0;
@@ -113,26 +111,30 @@ int isDec(char* cadena){//Evalúa si es una declaración, devuelve -1 si no lo es
     return flag;
 }
 int isIdentifier(char* cad){//Evalúa si es o no un identificador
-	char cadena[200];
-	strcpy(cadena,cad);
+	char cadena[N];
 	aux++;
-    int i,flag=false,tam=strlen(cadena)-1;
-	printf("%i)lenght: %i\n",aux,tam);
+    int i,flag=false,tam=strlen(cad)-1;
+    //Copiamos la cadena
+    for(i=0;i<tam;i++){
+    	cadena[i]=cad[i];
+	}
+	cadena[tam]='\0';
+	//printf("%s\n",cadena);
     if(tam<=3){//Omitimos
-    	for(i=0;i<tam;i++)
+    	/*for(i=0;i<tam;i++)
     		printf("°%c",cadena[i]);
-    	printf("\n");
+    	printf("\n");*/
+		flag=false;
 	}else{
 		if(isDec(cadena)!=-1){//Si tiene el tipo de dato como char, int, etc.
 	    	i=isDec(cadena)+1;//Empezaría en el espacio despues de la palabra ejemplo char 
 	    	////////////////////////////////////////////////////////////////////////////?
-	    	//printf("\nPalabra de declaracion correcta");
 	    	if( (tolower(cadena[i])>='a' && tolower(cadena[i])<='z') || cadena[i]=='_' ){
 	    		//printf("\nEmpieza bien");
 	    		flag = true;
 		    	for(;i<tam-1;i++){
 		    		if( (tolower(cadena[i])>='a' && tolower(cadena[i])<='z') || cadena[i]=='_' || (tolower(cadena[i])>='0' && tolower(cadena[i])<='9')){
-		    			//printf("\nIdentificador valido");
+						
 					}else{
 						flag=false;
 						break;
@@ -144,8 +146,18 @@ int isIdentifier(char* cad){//Evalúa si es o no un identificador
 	}
     return flag;
 }
-
-
+char* substring(char s[],int p, int l) {
+   	char *sub;
+	sub = (char*)malloc(N*sizeof(char));//Asignamos el tamaño al arreglo
+   	int c = 0;
+   
+   	while (c < l) {
+      sub[c] = s[p+c-1];
+      c++;
+   	}
+   	sub[c] = '\0';
+   	return sub;
+}
 
 
 
